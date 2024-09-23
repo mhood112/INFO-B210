@@ -1,4 +1,4 @@
-#conditionalExcutuion.py
+#conditionalExcution.py
 csv_file_path = 'TV_Shows.csv'  # Replace with your actual CSV file path
 
 def find_most_common_day(csv_file_path):
