@@ -1,0 +1,41 @@
+mhood112: Without using local libraries or imports, using data from a csv file, find the most common day for shows to be scheduled
+
+GitHub Copilot: To find the most common day for shows to be scheduled without using any local libraries or imports, you can manually read the CSV file and process the data. Here is a step-by-step plan:
+
+1. **Read the CSV file**: Open the file and read its contents line by line.
+2. **Extract the days**: Extract the column that contains the days when shows are scheduled.
+3. **Count the occurrences**: Use a dictionary to count the occurrences of each day.
+4. **Find the most common day**: Determine which day has the highest count.
+
+Here is the code to achieve this:
+
+```python
+def find_most_common_day(csv_file_path):
+    day_counts = {}
+    
+    with open(csv_file_path, mode='r') as file:
+        # Read the header line to find the index of the 'day' column
+        header = file.readline().strip().split(',')
+        day_index = header.index('day')
+        
+        # Read the rest of the lines
+        for line in file:
+            row = line.strip().split(',')
+            day = row[day_index]
+            
+            if day in day_counts:
+                day_counts[day] += 1
+            else:
+                day_counts[day] = 1
+    
+    # Find the most common day
+    most_common_day = max(day_counts, key=day_counts.get)
+    return most_common_day
+
+# Example usage
+csv_file_path = 'shows_schedule.csv'  # Replace with your actual CSV file path
+most_common_day = find_most_common_day(csv_file_path)
+print(f"The most common day for shows to be scheduled is: {most_common_day}")
+```
+
+Make sure your CSV file has a column named `day` that contains the days when shows are scheduled. Adjust the column name in the code if it is different.
