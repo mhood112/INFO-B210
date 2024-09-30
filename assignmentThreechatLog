@@ -1,0 +1,157 @@
+
+mhood112: Without importing libraries, using repeated execution, find which tv show has the most number of seasons and which show has the most number of episodes
+
+GitHub Copilot: To find the TV show with the most number of seasons and the one with the most number of episodes without importing libraries, you can manually iterate through the data and keep track of the counts. Here's a step-by-step plan:
+
+1. Open the CSV file and read its contents.
+2. Initialize variables to keep track of the maximum number of seasons and episodes.
+3. Iterate through each line of the CSV file.
+4. For each line, extract the number of seasons and episodes.
+5. Update the tracking variables if the current line has more seasons or episodes than the previously recorded maximum.
+6. Print the results.
+
+Here is the code to achieve this:
+
+```python
+# Open the CSV file
+with open('Tv_Show1.csv', 'r') as file:
+    # Skip the header line
+    next(file)
+    
+    # Initialize variables to keep track of the maximums
+    max_seasons = 0
+    max_episodes = 0
+    show_with_max_seasons = ""
+    show_with_max_episodes = ""
+    
+    # Iterate through each line in the file
+    for line in file:
+        # Split the line by comma to extract fields
+        fields = line.strip().split(',')
+        
+        # Extract the show name, number of seasons, and number of episodes
+        show_name = fields[0]
+        num_seasons = int(fields[1])
+        num_episodes = int(fields[2])
+        
+        # Update the maximum seasons and episodes if necessary
+        if num_seasons > max_seasons:
+            max_seasons = num_seasons
+            show_with_max_seasons = show_name
+        
+        if num_episodes > max_episodes:
+            max_episodes = num_episodes
+            show_with_max_episodes = show_name
+
+# Print the results
+print(f"Show with the most seasons: {show_with_max_seasons} ({max_seasons} seasons)")
+print(f"Show with the most episodes: {show_with_max_episodes} ({max_episodes} episodes)")
+```
+
+This code will read the CSV file, process each line to find the TV show with the most seasons and the one with the most episodes, and then print the results.
+
+mhood112: Without importing libraries, using while loops, find which tv show has the most number of seasons and which show has the most number of episodes
+
+GitHub Copilot: To achieve this using `while` loops instead of [`for`](command:_github.copilot.openSymbolFromReferences?%5B%22%22%2C%5B%7B%22uri%22%3A%7B%22scheme%22%3A%22file%22%2C%22authority%22%3A%22%22%2C%22path%22%3A%22%2FUsers%2Fmiahood%2FDownloads%2FRepeated%20Execution%2FrepeatedExe.py%22%2C%22query%22%3A%22%22%2C%22fragment%22%3A%22%22%7D%2C%22pos%22%3A%7B%22line%22%3A11%2C%22character%22%3A4%7D%7D%5D%2C%2208be50a2-15d1-4cbb-b5af-15a8b632364f%22%5D "Go to definition") loops, you can manually iterate through the lines of the file. Here is the updated code:
+
+```python
+# Open the CSV file
+file = open('Tv_Show1.csv', 'r')
+
+# Skip the header line
+file.readline()
+
+# Initialize variables to keep track of the maximums
+max_seasons = 0
+max_episodes = 0
+show_with_max_seasons = ""
+show_with_max_episodes = ""
+
+# Read the first line of the file
+line = file.readline()
+
+# Iterate through each line in the file using a while loop
+while line:
+    # Split the line by comma to extract fields
+    fields = line.strip().split(',')
+    
+    # Extract the show name, number of seasons, and number of episodes
+    show_name = fields[0]
+    num_seasons = int(fields[1])
+    num_episodes = int(fields[2])
+    
+    # Update the maximum seasons and episodes if necessary
+    if num_seasons > max_seasons:
+        max_seasons = num_seasons
+        show_with_max_seasons = show_name
+    
+    if num_episodes > max_episodes:
+        max_episodes = num_episodes
+        show_with_max_episodes = show_name
+    
+    # Read the next line of the file
+    line = file.readline()
+
+# Close the file
+file.close()
+
+# Print the results
+print(f"Show with the most seasons: {show_with_max_seasons} ({max_seasons} seasons)")
+print(f"Show with the most episodes: {show_with_max_episodes} ({max_episodes} episodes)")
+```
+
+### Explanation:
+1. **Open the File**:
+    ```python
+    file = open('Tv_Show1.csv', 'r')
+    ```
+
+2. **Skip the Header Line**:
+    ```python
+    file.readline()
+    ```
+
+3. **Initialize Variables**:
+    ```python
+    max_seasons = 0
+    max_episodes = 0
+    show_with_max_seasons = ""
+    show_with_max_episodes = ""
+    ```
+
+4. **Read the First Line**:
+    ```python
+    line = file.readline()
+    ```
+
+5. **While Loop to Iterate Through Lines**:
+    ```python
+    while line:
+        fields = line.strip().split(',')
+        show_name = fields[0]
+        num_seasons = int(fields[1])
+        num_episodes = int(fields[2])
+        
+        if num_seasons > max_seasons:
+            max_seasons = num_seasons
+            show_with_max_seasons = show_name
+        
+        if num_episodes > max_episodes:
+            max_episodes = num_episodes
+            show_with_max_episodes = show_name
+        
+        line = file.readline()
+    ```
+
+6. **Close the File**:
+    ```python
+    file.close()
+    ```
+
+7. **Print the Results**:
+    ```python
+    print(f"Show with the most seasons: {show_with_max_seasons} ({max_seasons} seasons)")
+    print(f"Show with the most episodes: {show_with_max_episodes} ({max_episodes} episodes)")
+    ```
+
+This code uses a `while` loop to read each line of the file, process the data, and update the maximum values accordingly.
