@@ -1,43 +1,64 @@
 def most_common_schedule_time(file_path):
-    # Step 1: Open and read the CSV file
-    with open(file_path, 'r') as file:
-        lines = file.readlines()
+    """Find the most common schedule time for each genre."""
+    genre_schedule = {}
 
-    # Step 2: Parse the CSV data
-    headers = lines[0].strip().split(',')
-    genre_index = headers.index('Genres')
-    schedule_time_index = headers.index('Schedule (time)')
+    # Open the file and read the lines
+    try:
+        with open(file_path, 'r') as file:
+            lines = file.readlines()
+            headers = lines[0].strip().split(',')
+            
+            # Identify the index of the genres and schedule time in the headers
+            genre_index = 5  # Column 5 for genres
+            schedule_time_index = 11  # Column 11 for schedule times
 
-    # Step 3: Create a dictionary to store the count of each Schedule (time) for each genre
-    genre_schedule_count = {}
+            for line in lines[1:]:
+                # Split the lines into fields by the delimiter ,
+                fields = line.strip().split(',')
+                
+                #checks for empty fields
+                if len(fields) <= max(genre_index, schedule_time_index):
+                    print(f"Skipping line due to insufficient fields: {line}")
+                    continue
 
-    # Step 4: Iterate through the data and populate the dictionary
-    for line in lines[1:]:
-        fields = line.strip().split(',')
-        genres_str = fields[genre_index].strip()
-        # Manually parse the genres from the string representation
-        genres = genres_str.strip("[]").replace("'", "").split(", ")
-        schedule_time = fields[schedule_time_index]
+                genres_str = fields[genre_index].strip("[]").replace("'", "").replace('"', '')
+                genres = [genre.strip() for genre in genres_str.split(',')]
+                schedule_time = fields[schedule_time_index]
 
-        for genre in genres:
-            genre = genre.strip().lower()  # Ensure genre is treated as a lowercase string
-            if genre not in genre_schedule_count:
-                genre_schedule_count[genre] = {}
-            if schedule_time not in genre_schedule_count[genre]:
-                genre_schedule_count[genre][schedule_time] = 0
-            genre_schedule_count[genre][schedule_time] += 1
+                # Debug prints to verify correct parsing
+                #print(f"Parsed genres: {genres}")
+                #print(f"Parsed schedule time: {schedule_time}")
 
-    # Step 5: Prompt the user for a genre
-    user_genre = input("Enter a genre: ").strip().lower()
+                if not schedule_time:
+                    print(f"Skipping line due to missing schedule time: {line}")
+                    continue
 
-    # Step 6: Determine the most common Schedule (time) for the inputted genre
-    if user_genre in genre_schedule_count:
-        schedule_times = genre_schedule_count[user_genre]
-        most_common_time = max(schedule_times, key=schedule_times.get)
-        return most_common_time
-    else:
-        return "Genre not found."
+                for genre in genres:
+                    if genre not in genre_schedule: #checks if the genre is in the dictionary
+                        genre_schedule[genre] = [] #if not, adds the genre to the dictionary
+                    genre_schedule[genre].append(schedule_time) #appends the schedule time to the genre
 
-# Example usage
-file_path = 'TV_show_data (2).csv'
-print(most_common_schedule_time(file_path))
+        # Calculate the most common schedule time for each genre
+        most_common_times = {}
+        for genre, times in genre_schedule.items():
+            if not times:
+                continue  # Skip genres with no schedule times
+            time_count = {}
+            for time in times: #iterates through the schedule times
+                if time not in time_count:
+                    time_count[time] = 0
+                time_count[time] += 1
+                #initializes a dictionary to count the number of times a schedule time appears          
+            most_common_time = max(time_count, key=time_count.get) # finds the most common schedule time
+            most_common_times[genre] = most_common_time
+
+        print("Most Common Times:")
+        for genre, time in most_common_times.items(): 
+            print(f"\t{genre}: {time}")  # Print each result with a tab
+        return most_common_times
+
+    except FileNotFoundError:
+        print(f"File not found: {file_path}")
+
+# Example call to the function
+most_common_schedule_time('TV_show_data.csv')
