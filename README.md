@@ -20,5 +20,7 @@
     - Use the Tv_Show.csv as the CSV file
 
 **UserDefinedFunction.py**
-  The purpose is to ask the user for a genre and print out most common Schedule(time) based upon genre inputed.
+  **The purpose is to ask the user for a genre and print out most common Schedule(time) based upon genre inputed.
     - Use the Tv_Show.csv as the CSV file
+
+This is suppose to take the csv file and read the data. Then it will know that column 6 is where the genre data is located, and column 12 is where the schedule(time) data is located. It will go throw those columns and put the genres into a dictionary, while keeping track of the schedule(times) to see which one was used the most for that said genre. This should print out all the genres with the corresponding common time. I know that is not what will get displayed. In the dataset, the summary column has an abundance amount of commas, so when the data is being split by the commas, it will include those commas as well ruining the columns. 
