@@ -1,0 +1,482 @@
+mhood112: Using this csv without importing or using external libraries, Create a show class, complete with initialization function. Use the data in your file to create show objects for each sample in your data. Keep in mind that in the summary column, there are "" and ,, that are within this string
+
+mhood112: 
+With opening and reading this CSV, Create a show class, complete with initialization function. Use the data in your file to create show objects for each sample in your data. Keep in mind that in the summary column, there are "" and ,, that are within the string
+
+GitHub Copilot: To create a `Show` class and instantiate objects from the CSV data, we need to handle the CSV parsing manually due to the constraints. Here's a step-by-step plan and the corresponding code:
+
+1. Define the `Show` class with an initialization function.
+2. Open and read the CSV file.
+3. Parse the CSV data manually, considering the special characters in the summary column.
+4. Create `Show` objects for each row in the CSV data.
+
+### Step 1: Define the `Show` Class
+
+```python
+class Show:
+    def __init__(self, name, summary, average_runtime, end_date, premiere_date, genres, show_type, language, network, rating, schedule_days, schedule_time, total_seasons, total_episodes, character_names, person_names, official_site):
+        self.name = name
+        self.summary = summary
+        self.average_runtime = average_runtime
+        self.end_date = end_date
+        self.premiere_date = premiere_date
+        self.genres = genres
+        self.show_type = show_type
+        self.language = language
+        self.network = network
+        self.rating = rating
+        self.schedule_days = schedule_days
+        self.schedule_time = schedule_time
+        self.total_seasons = total_seasons
+        self.total_episodes = total_episodes
+        self.character_names = character_names
+        self.person_names = person_names
+        self.official_site = official_site
+```
+
+### Step 2: Open and Read the CSV File
+
+```python
+filename = 'TV_show_data copy.csv'
+
+with open(filename, 'r') as file:
+    lines = file.readlines()
+```
+
+### Step 3: Parse the CSV Data Manually
+
+```python
+shows = []
+
+# Extract the header
+header = lines[0].strip().split(',')
+
+# Process each line in the CSV
+for line in lines[1:]:
+    # Handle the special characters in the summary column
+    parts = line.strip().split(',"')
+    first_part = parts[0].split(',')
+    summary_part = parts[1].rsplit('",', 1)
+    last_part = summary_part[1].split(',')
+
+    # Combine all parts
+    data = first_part + [summary_part[0]] + last_part
+
+    # Create a Show object
+    show = Show(
+        name=data[0],
+        summary=data[1],
+        average_runtime=int(data[2]),
+        end_date=data[3],
+        premiere_date=data[4],
+        genres=data[5],
+        show_type=data[6],
+        language=data[7],
+        network=data[8],
+        rating=float(data[9]),
+        schedule_days=data[10],
+        schedule_time=data[11],
+        total_seasons=int(data[12]),
+        total_episodes=int(data[13]),
+        character_names=data[14],
+        person_names=data[15],
+        official_site=data[16]
+    )
+
+    shows.append(show)
+```
+
+### Step 4: Verify the Show Objects
+
+```python
+for show in shows:
+    print(f"Show: {show.name}, Rating: {show.rating}")
+```
+
+### Full Code
+
+```python
+class Show:
+    def __init__(self, name, summary, average_runtime, end_date, premiere_date, genres, show_type, language, network, rating, schedule_days, schedule_time, total_seasons, total_episodes, character_names, person_names, official_site):
+        self.name = name
+        self.summary = summary
+        self.average_runtime = average_runtime
+        self.end_date = end_date
+        self.premiere_date = premiere_date
+        self.genres = genres
+        self.show_type = show_type
+        self.language = language
+        self.network = network
+        self.rating = rating
+        self.schedule_days = schedule_days
+        self.schedule_time = schedule_time
+        self.total_seasons = total_seasons
+        self.total_episodes = total_episodes
+        self.character_names = character_names
+        self.person_names = person_names
+        self.official_site = official_site
+
+filename = 'TV_show_data copy.csv'
+
+with open(filename, 'r') as file:
+    lines = file.readlines()
+
+shows = []
+
+# Extract the header
+header = lines[0].strip().split(',')
+
+# Process each line in the CSV
+for line in lines[1:]:
+    # Handle the special characters in the summary column
+    parts = line.strip().split(',"')
+    first_part = parts[0].split(',')
+    summary_part = parts[1].rsplit('",', 1)
+    last_part = summary_part[1].split(',')
+
+    # Combine all parts
+    data = first_part + [summary_part[0]] + last_part
+
+    # Create a Show object
+    show = Show(
+        name=data[0],
+        summary=data[1],
+        average_runtime=int(data[2]),
+        end_date=data[3],
+        premiere_date=data[4],
+        genres=data[5],
+        show_type=data[6],
+        language=data[7],
+        network=data[8],
+        rating=float(data[9]),
+        schedule_days=data[10],
+        schedule_time=data[11],
+        total_seasons=int(data[12]),
+        total_episodes=int(data[13]),
+        character_names=data[14],
+        person_names=data[15],
+        official_site=data[16]
+    )
+
+    shows.append(show)
+
+for show in shows:
+    print(f"Show: {show.name}, Rating: {show.rating}")
+```
+
+This code will read the CSV file, parse the data correctly considering the special characters in the summary column, and create `Show` objects for each row in the CSV.
+
+mhood112: it says that line 49 list index it out of range
+
+GitHub Copilot: The issue with the "list index out of range" error likely stems from the way the CSV line is being split and processed. Let's improve the CSV parsing logic to handle the special characters in the summary column more robustly.
+
+Here's an updated approach:
+
+1. Split the line by commas, but keep track of quoted sections to handle commas within quotes correctly.
+2. Combine the parts back together to form the correct columns.
+
+### Updated Code
+
+```python
+class Show:
+    def __init__(self, name, summary, average_runtime, end_date, premiere_date, genres, show_type, language, network, rating, schedule_days, schedule_time, total_seasons, total_episodes, character_names, person_names, official_site):
+        self.name = name
+        self.summary = summary
+        self.average_runtime = average_runtime
+        self.end_date = end_date
+        self.premiere_date = premiere_date
+        self.genres = genres
+        self.show_type = show_type
+        self.language = language
+        self.network = network
+        self.rating = rating
+        self.schedule_days = schedule_days
+        self.schedule_time = schedule_time
+        self.total_seasons = total_seasons
+        self.total_episodes = total_episodes
+        self.character_names = character_names
+        self.person_names = person_names
+        self.official_site = official_site
+
+filename = 'TV_show_data copy.csv'
+
+with open(filename, 'r') as file:
+    lines = file.readlines()
+
+shows = []
+
+# Extract the header
+header = lines[0].strip().split(',')
+
+# Process each line in the CSV
+for line in lines[1:]:
+    # Initialize variables
+    data = []
+    current = ''
+    in_quotes = False
+
+    # Iterate over each character in the line
+    for char in line:
+        if char == '"' and not in_quotes:
+            in_quotes = True
+        elif char == '"' and in_quotes:
+            in_quotes = False
+        elif char == ',' and not in_quotes:
+            data.append(current)
+            current = ''
+        else:
+            current += char
+
+    # Append the last part
+    data.append(current)
+
+    # Create a Show object
+    show = Show(
+        name=data[0],
+        summary=data[1],
+        average_runtime=int(data[2]),
+        end_date=data[3],
+        premiere_date=data[4],
+        genres=data[5],
+        show_type=data[6],
+        language=data[7],
+        network=data[8],
+        rating=float(data[9]),
+        schedule_days=data[10],
+        schedule_time=data[11],
+        total_seasons=int(data[12]),
+        total_episodes=int(data[13]),
+        character_names=data[14],
+        person_names=data[15],
+        official_site=data[16] if len(data) > 16 else None
+    )
+
+    shows.append(show)
+
+for show in shows:
+    print(f"Show: {show.name}, Rating: {show.rating}")
+```
+
+This code should handle the CSV parsing more robustly, ensuring that quoted sections are treated correctly and commas within quotes do not split the data incorrectly. The 
+
+official_site
+
+ field is also handled to avoid the "list index out of range" error if it is missing.
+
+mhood112: it says that line 57, ValueError: invalid literal for int() with base 10: '-'
+
+GitHub Copilot: The error indicates that one of the fields expected to be an integer contains a non-integer value, specifically `'-'`. This can happen if the CSV file has missing or placeholder values for some fields. We need to handle these cases gracefully.
+
+Let's update the code to handle such cases by checking if the value can be converted to an integer and providing a default value if it cannot.
+
+### Updated Code
+
+```python
+class Show:
+    def __init__(self, name, summary, average_runtime, end_date, premiere_date, genres, show_type, language, network, rating, schedule_days, schedule_time, total_seasons, total_episodes, character_names, person_names, official_site):
+        self.name = name
+        self.summary = summary
+        self.average_runtime = average_runtime
+        self.end_date = end_date
+        self.premiere_date = premiere_date
+        self.genres = genres
+        self.show_type = show_type
+        self.language = language
+        self.network = network
+        self.rating = rating
+        self.schedule_days = schedule_days
+        self.schedule_time = schedule_time
+        self.total_seasons = total_seasons
+        self.total_episodes = total_episodes
+        self.character_names = character_names
+        self.person_names = person_names
+        self.official_site = official_site
+
+filename = 'TV_show_data copy.csv'
+
+with open(filename, 'r') as file:
+    lines = file.readlines()
+
+shows = []
+
+# Extract the header
+header = lines[0].strip().split(',')
+
+# Process each line in the CSV
+for line in lines[1:]:
+    # Initialize variables
+    data = []
+    current = ''
+    in_quotes = False
+
+    # Iterate over each character in the line
+    for char in line:
+        if char == '"' and not in_quotes:
+            in_quotes = True
+        elif char == '"' and in_quotes:
+            in_quotes = False
+        elif char == ',' and not in_quotes:
+            data.append(current)
+            current = ''
+        else:
+            current += char
+
+    # Append the last part
+    data.append(current)
+
+    # Helper function to convert to int with default value
+    def to_int(value, default=0):
+        try:
+            return int(value)
+        except ValueError:
+            return default
+
+    # Helper function to convert to float with default value
+    def to_float(value, default=0.0):
+        try:
+            return float(value)
+        except ValueError:
+            return default
+
+    # Create a Show object
+    show = Show(
+        name=data[0],
+        summary=data[1],
+        average_runtime=to_int(data[2]),
+        end_date=data[3],
+        premiere_date=data[4],
+        genres=data[5],
+        show_type=data[6],
+        language=data[7],
+        network=data[8],
+        rating=to_float(data[9]),
+        schedule_days=data[10],
+        schedule_time=data[11],
+        total_seasons=to_int(data[12]),
+        total_episodes=to_int(data[13]),
+        character_names=data[14],
+        person_names=data[15],
+        official_site=data[16] if len(data) > 16 else None
+    )
+
+    shows.append(show)
+
+for show in shows:
+    print(f"Show: {show.name}, Rating: {show.rating}")
+```
+
+In this updated code, I've added two helper functions, `to_int` and `to_float`, to safely convert values to integers and floats, respectively. If the conversion fails (e.g., due to a `'-'` value), the functions return a default value (0 for integers and 0.0 for floats). This should prevent the `ValueError` and allow the code to handle missing or placeholder values gracefully.
+
+mhood112: Can you include some expectoin handling
+
+GitHub Copilot: Certainly! Let's add exception handling to ensure that any errors during the creation of 
+
+Show
+
+ objects are caught and logged. This will help us identify any issues with specific rows in the CSV file without stopping the entire process.
+
+### Updated Code with Exception Handling
+
+```python
+class Show:
+    def __init__(self, name, summary, average_runtime, end_date, premiere_date, genres, show_type, language, network, rating, schedule_days, schedule_time, total_seasons, total_episodes, character_names, person_names, official_site):
+        self.name = name
+        self.summary = summary
+        self.average_runtime = average_runtime
+        self.end_date = end_date
+        self.premiere_date = premiere_date
+        self.genres = genres
+        self.show_type = show_type
+        self.language = language
+        self.network = network
+        self.rating = rating
+        self.schedule_days = schedule_days
+        self.schedule_time = schedule_time
+        self.total_seasons = total_seasons
+        self.total_episodes = total_episodes
+        self.character_names = character_names
+        self.person_names = person_names
+        self.official_site = official_site
+
+filename = 'TV_show_data copy.csv'
+
+with open(filename, 'r') as file:
+    lines = file.readlines()
+
+shows = []
+
+# Extract the header
+header = lines[0].strip().split(',')
+
+# Process each line in the CSV
+for line in lines[1:]:
+    try:
+        # Initialize variables
+        data = []
+        current = ''
+        in_quotes = False
+
+        # Iterate over each character in the line
+        for char in line:
+            if char == '"' and not in_quotes:
+                in_quotes = True
+            elif char == '"' and in_quotes:
+                in_quotes = False
+            elif char == ',' and not in_quotes:
+                data.append(current)
+                current = ''
+            else:
+                current += char
+
+        # Append the last part
+        data.append(current)
+
+        # Helper function to convert to int with default value
+        def to_int(value, default=0):
+            try:
+                return int(value)
+            except ValueError:
+                return default
+
+        # Helper function to convert to float with default value
+        def to_float(value, default=0.0):
+            try:
+                return float(value)
+            except ValueError:
+                return default
+
+        # Create a Show object
+        show = Show(
+            name=data[0],
+            summary=data[1],
+            average_runtime=to_int(data[2]),
+            end_date=data[3],
+            premiere_date=data[4],
+            genres=data[5],
+            show_type=data[6],
+            language=data[7],
+            network=data[8],
+            rating=to_float(data[9]),
+            schedule_days=data[10],
+            schedule_time=data[11],
+            total_seasons=to_int(data[12]),
+            total_episodes=to_int(data[13]),
+            character_names=data[14],
+            person_names=data[15],
+            official_site=data[16] if len(data) > 16 else None
+        )
+
+        shows.append(show)
+    except Exception as e:
+        print(f"Error processing line: {line.strip()}")
+        print(f"Exception: {e}")
+
+for show in shows:
+    print(f"Show: {show.name}, Rating: {show.rating}, Genres: {show.genres}, Schedule Time: {show.schedule_time}")
+```
+
+In this updated code, I've wrapped the processing of each line in a `try` block to catch any exceptions that occur during the creation of 
+
+Show
+
+ objects. If an exception is caught, it prints an error message along with the problematic line and the exception details. This way, the script continues processing the remaining lines even if some lines cause errors.
