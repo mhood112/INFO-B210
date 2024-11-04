@@ -52,15 +52,17 @@ for line in lines[1:]:
         # Append the last part
         data.append(current)
 
-        # Helper function to convert to int with default value if conversion fails returns 0
+
         def to_int(value, default=0):
+            """ Convert a string to an integer. If the conversion fails, return the default value. """
             try:
                 return int(value)
             except ValueError:
                 return default
 
-        # Helper function to convert to float with default value if conversion fails returns 0.0
+        
         def to_float(value, default=0.0):
+            """ Convert a string to a float. If the conversion fails, return the default value. """
             try:
                 return float(value)
             except ValueError:
