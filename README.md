@@ -24,11 +24,11 @@
   ######  * This is suppose to take the csv file and read the data. Then it will know that column 6 is where the genre data is located, and column 12 is where the schedule(time) data is located. It will go throw those columns and put the genres into a dictionary, while keeping track of the schedule(times) to see which one was used the most for that said genre. This should print out all the genres with the corresponding common time. I know that is not what will get displayed. In the dataset, the summary column has an abundance amount of commas, so when the data is being split by the commas, it will include those commas as well ruining the columns. 
 
 ## **ObjectOrientedProgramming.py**
-  ### The purpose of this program is to Create a show class, complete with initialization function.
+  #### The purpose of this program is to Create a show class, complete with initialization function.
   ###### * Use the Tv_Show.csv as the CSV file
   ###### * This will take the define a class, show, the initize the attribute of the show objects for the csv file. Then the code will open the CSV and read the file. It will identify the headers and then store the data into a list called data. Then the show object is created where the corresponding data is paired with the corresponding object. In this, I just ended up calling the Show Name, Genre, Rating, and Show time. So when this is ran, it will display this of all the shows.
 
 ## **ListAssignment.py** 
-  ### The purpose of this program is to write of function that makes a list of TV show names that ended prior to a given date. This will import the new data into a CSV file. 
+  #### The purpose of this program is to write of function that makes a list of TV show names that ended prior to a given date. This will import the new data into a CSV file. 
   ##### * Use the Tv_Show.csv as the CSV file
   ##### * 
