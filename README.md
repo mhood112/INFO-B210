@@ -29,4 +29,6 @@
   ###### * This will take the define a class, show, the initize the attribute of the show objects for the csv file. Then the code will open the CSV and read the file. It will identify the headers and then store the data into a list called data. Then the show object is created where the corresponding data is paired with the corresponding object. In this, I just ended up calling the Show Name, Genre, Rating, and Show time. So when this is ran, it will display this of all the shows.
 
 ## **ListAssignment.py** 
-  ## The purpose of this program is to write of function that makes a list of TV show names that ended prior to a given date. This will import the new data into a CSV file. 
+  ### The purpose of this program is to write of function that makes a list of TV show names that ended prior to a given date. This will import the new data into a CSV file. 
+  ##### * Use the Tv_Show.csv as the CSV file
+  ##### * 
