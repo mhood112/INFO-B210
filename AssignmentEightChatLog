@@ -1,0 +1,289 @@
+mhood112: Without using any external libraries or inputing, Write a function that orders TV show names based on their run time (based on length of time between Premiere Date and End Date) and as a set to a new CSV file. Keep in mind that there are additional quotes and comma within this data
+
+
+
+GitHub Copilot: To achieve this, we need to:
+
+1. Parse the CSV data.
+2. Calculate the runtime for each TV show.
+3. Sort the TV shows based on their runtime.
+4. Write the sorted TV show names to a new CSV file.
+
+Here is a Python function to accomplish this:
+
+```python
+import csv
+from datetime import datetime
+
+def calculate_runtime(premiere_date, end_date):
+    if not end_date:
+        return 0
+    premiere = datetime.strptime(premiere_date, "%m/%d/%y")
+    end = datetime.strptime(end_date, "%m/%d/%y")
+    return (end - premiere).days
+
+def order_tv_shows_by_runtime(input_file, output_file):
+    tv_shows = []
+
+    with open(input_file, mode='r', encoding='utf-8') as file:
+        reader = csv.DictReader(file)
+        for row in reader:
+            runtime = calculate_runtime(row['Premiere Date'], row['End Date'])
+            tv_shows.append((row['Name'], runtime))
+
+    # Sort TV shows by runtime
+    tv_shows.sort(key=lambda x: x[1], reverse=True)
+
+    # Write sorted TV show names to a new CSV file
+    with open(output_file, mode='w', encoding='utf-8', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerow(['Name'])
+        for show in tv_shows:
+            writer.writerow([show[0]])
+
+# Example usage
+order_tv_shows_by_runtime('TV_Show.csv', 'Sorted_TV_Shows.csv')
+```
+
+This function reads the TV show data from 
+
+TV_Show.csv
+
+, calculates the runtime for each show, sorts the shows by runtime, and writes the sorted show names to `Sorted_TV_Shows.csv`.
+
+mhood112: Without using any external libraries or importing, Write a function that orders TV show names based on their run time (based on length of time between Premiere Date and End Date) and as a set to a new CSV file. Keep in mind that there are additional quotes and comma within this data
+
+GitHub Copilot: Here is a Python function that processes the CSV data, calculates the runtime for each TV show, sorts the shows based on their runtime, and writes the sorted show names to a new CSV file. This function does not use any external libraries or imports:
+
+```python
+def calculate_runtime(premiere_date, end_date):
+    if not end_date:
+        return 0
+    premiere_month, premiere_day, premiere_year = map(int, premiere_date.split('/'))
+    end_month, end_day, end_year = map(int, end_date.split('/'))
+    premiere_days = premiere_year * 365 + premiere_month * 30 + premiere_day
+    end_days = end_year * 365 + end_month * 30 + end_day
+    return end_days - premiere_days
+
+def order_tv_shows_by_runtime(input_file, output_file):
+    tv_shows = []
+
+    with open(input_file, 'r', encoding='utf-8') as file:
+        lines = file.readlines()
+        headers = lines[0].strip().split(',')
+        name_index = headers.index('Name')
+        premiere_index = headers.index('Premiere Date')
+        end_index = headers.index('End Date')
+
+        for line in lines[1:]:
+            columns = line.strip().split(',')
+            name = columns[name_index].strip('"')
+            premiere_date = columns[premiere_index].strip('"')
+            end_date = columns[end_index].strip('"')
+            runtime = calculate_runtime(premiere_date, end_date)
+            tv_shows.append((name, runtime))
+
+    # Sort TV shows by runtime
+    tv_shows.sort(key=lambda x: x[1], reverse=True)
+
+    # Write sorted TV show names to a new CSV file
+    with open(output_file, 'w', encoding='utf-8') as file:
+        file.write('Name\n')
+        for show in tv_shows:
+            file.write(f'{show[0]}\n')
+
+# Example usage
+order_tv_shows_by_runtime('TV_Show.csv', 'Sorted_TV_Shows.csv')
+```
+
+This function reads the TV show data from 
+
+TV_Show.csv
+
+, calculates the runtime for each show, sorts the shows by runtime, and writes the sorted show names to `Sorted_TV_Shows.csv`. The `calculate_runtime` function converts the dates to a simple day count for comparison.
+
+mhood112: what is this error
+
+GitHub Copilot: The error in your code likely arises from the way the CSV lines are being split. The 
+
+strip().split(',')
+
+ method does not handle cases where there are commas within quoted fields correctly. This can lead to incorrect splitting of the columns.
+
+To fix this, you need to handle quoted fields properly. Here is an updated version of your code that addresses this issue:
+
+```python
+def calculate_runtime(premiere_date, end_date):
+    if not end_date:
+        return 0
+    premiere_month, premiere_day, premiere_year = map(int, premiere_date.split('/'))
+    end_month, end_day, end_year = map(int, end_date.split('/'))
+    premiere_days = premiere_year * 365 + premiere_month * 30 + premiere_day
+    end_days = end_year * 365 + end_month * 30 + end_day
+    return end_days - premiere_days
+
+def parse_csv_line(line):
+    in_quotes = False
+    field = ''
+    fields = []
+    for char in line:
+        if char == '"' and not in_quotes:
+            in_quotes = True
+        elif char == '"' and in_quotes:
+            in_quotes = False
+        elif char == ',' and not in_quotes:
+            fields.append(field)
+            field = ''
+        else:
+            field += char
+    fields.append(field)
+    return fields
+
+def order_tv_shows_by_runtime(input_file, output_file):
+    tv_shows = []
+
+    with open(input_file, 'r', encoding='utf-8') as file:
+        lines = file.readlines()
+        headers = parse_csv_line(lines[0].strip())
+        name_index = headers.index('Name')
+        premiere_index = headers.index('Premiere Date')
+        end_index = headers.index('End Date')
+
+        for line in lines[1:]:
+            columns = parse_csv_line(line.strip())
+            name = columns[name_index].strip('"')
+            premiere_date = columns[premiere_index].strip('"')
+            end_date = columns[end_index].strip('"')
+            runtime = calculate_runtime(premiere_date, end_date)
+            tv_shows.append((name, runtime))
+
+    # Sort TV shows by runtime
+    tv_shows.sort(key=lambda x: x[1], reverse=True)
+
+    # Write sorted TV show names to a new CSV file
+    with open(output_file, 'w', encoding='utf-8') as file:
+        file.write('Name\n')
+        for show in tv_shows:
+            file.write(f'{show[0]}\n')
+
+# Example usage
+order_tv_shows_by_runtime('TV_Show.csv', 'Sorted_TV_Shows.csv')
+```
+
+This code includes a `parse_csv_line` function that correctly handles quoted fields and commas within those fields. This should resolve any issues related to incorrect splitting of the CSV lines.
+
+mhood112: Add in some error handling
+
+GitHub Copilot: Here is the updated code with added error handling to manage potential issues such as missing or malformed dates, missing columns, and file read/write errors:
+
+```python
+def calculate_runtime(premiere_date, end_date):
+    try:
+        if not end_date:
+            return 0
+        premiere_month, premiere_day, premiere_year = map(int, premiere_date.split('/'))
+        end_month, end_day, end_year = map(int, end_date.split('/'))
+        premiere_days = premiere_year * 365 + premiere_month * 30 + premiere_day
+        end_days = end_year * 365 + end_month * 30 + end_day
+        return end_days - premiere_days
+    except ValueError:
+        return 0
+
+def parse_csv_line(line):
+    in_quotes = False
+    field = ''
+    fields = []
+    for char in line:
+        if char == '"' and not in_quotes:
+            in_quotes = True
+        elif char == '"' and in_quotes:
+            in_quotes = False
+        elif char == ',' and not in_quotes:
+            fields.append(field)
+            field = ''
+        else:
+            field += char
+    fields.append(field)
+    return fields
+
+def order_tv_shows_by_runtime(input_file, output_file):
+    tv_shows = []
+
+    try:
+        with open(input_file, 'r', encoding='utf-8') as file:
+            lines = file.readlines()
+            headers = parse_csv_line(lines[0].strip())
+            name_index = headers.index('Name')
+            premiere_index = headers.index('Premiere Date')
+            end_index = headers.index('End Date')
+
+            for line in lines[1:]:
+                columns = parse_csv_line(line.strip())
+                try:
+                    name = columns[name_index].strip('"')
+                    premiere_date = columns[premiere_index].strip('"')
+                    end_date = columns[end_index].strip('"')
+                    runtime = calculate_runtime(premiere_date, end_date)
+                    tv_shows.append((name, runtime))
+                except IndexError:
+                    print(f"Skipping malformed line: {line.strip()}")
+
+        # Sort TV shows by runtime
+        tv_shows.sort(key=lambda x: x[1], reverse=True)
+
+        # Write sorted TV show names to a new CSV file
+        with open(output_file, 'w', encoding='utf-8') as file:
+            file.write('Name\n')
+            for show in tv_shows:
+                file.write(f'{show[0]}\n')
+
+    except FileNotFoundError:
+        print(f"Error: The file {input_file} was not found.")
+    except IOError:
+        print(f"Error: An I/O error occurred while processing the file {input_file}.")
+
+# Example usage
+order_tv_shows_by_runtime('TV_Show.csv', 'Sorted_TV_Shows.csv')
+```
+
+In this updated code:
+- The 
+
+calculate_runtime
+
+ function includes a `try-except` block to handle potential `ValueError` exceptions when parsing dates.
+- The 
+
+order_tv_shows_by_runtime
+
+ function includes error handling for file operations (`FileNotFoundError` and `IOError`).
+- Each line is processed within a `try-except` block to handle potential `IndexError` exceptions when accessing columns, and malformed lines are skipped with a message printed to the console.
+
+mhood112: Explain this code in simple terms
+
+GitHub Copilot: Sure, here's a simple explanation of the code:
+
+1. **calculate_runtime Function**:
+   - This function calculates the number of days between the premiere date and the end date of a TV show.
+   - It splits the dates into month, day, and year parts.
+   - It converts these parts into a total number of days for easy comparison.
+   - If there's an error in the date format, it returns 0.
+
+2. **parse_csv_line Function**:
+   - This function reads a line from a CSV file and splits it into individual fields.
+   - It handles cases where fields are enclosed in quotes and may contain commas.
+   - It returns a list of fields.
+
+3. **order_tv_shows_by_runtime Function**:
+   - This function reads TV show data from a CSV file, calculates the runtime for each show, and sorts the shows by runtime.
+   - It opens the input file and reads all lines.
+   - It uses 
+
+parse_csv_line
+
+ to split the header line and find the indexes of relevant columns (Name, Premiere Date, End Date).
+   - For each subsequent line, it extracts the relevant data, calculates the runtime, and stores it in a list.
+   - It sorts the list of TV shows by runtime in descending order.
+   - It writes the sorted TV show names to a new CSV file.
+
+The code includes error handling to manage potential issues with date parsing and file operations.
