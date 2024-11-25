@@ -32,3 +32,10 @@
   #### The purpose of this program is to write of function that makes a list of TV show names that ended prior to a given date. This will import the new data into a CSV file. 
   ##### * Use the Tv_Show.csv as the CSV file
   ##### * 
+
+## **TupleNSets.py**
+  ### Use the **NEW_TVSHOW.csv** file 
+  #### The purpose of this program is to write a function that orders TV show names based on their run time (based on length of time between Premiere Date and End Date) and as a set to a new CSV file.
+  ####
+
+
