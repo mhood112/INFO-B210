@@ -37,4 +37,6 @@
   #### The purpose of this program is to write a function that orders TV show names based on their run time (based on length of time between Premiere Date and End Date) and as a set to a new CSV file.
   #####  * Use the Tv_Show.csv as the CSV file
 
-
+## **Dictionaries.py**
+  #### Write a function that alphabetically sorts the names of the TV shows and then creates ordered sets with the name of the show, genres, language, and rating, and writes to a new CSV file. 
+  #####  * Use the Tv_Show.csv as the CSV file
