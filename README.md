@@ -36,7 +36,9 @@
 ## **TupleNSets.py**
   #### The purpose of this program is to write a function that orders TV show names based on their run time (based on length of time between Premiere Date and End Date) and as a set to a new CSV file.
   #####  * Use the Tv_Show.csv as the CSV file
+  #####  * This will calulate the runtime of each tv show in the days given for it premiere and end dates. NOTE.. in this dataset, the premiere and end dates column labels are switched. So, to counter this, I have switched them in my code. When indexing the premiere date, i have set the code to index for 'End Date' and vise versa. The CSV will be ran and the times will be calculated and out into a set. Then that set will be put into a new CSV file.
 
 ## **Dictionaries.py**
   #### Write a function that alphabetically sorts the names of the TV shows and then creates ordered sets with the name of the show, genres, language, and rating, and writes to a new CSV file. 
   #####  * Use the Tv_Show.csv as the CSV file
+  #####  * This will create one big user defined function that will read the csv file and write a new CSV file with the shows in alphabetical order. Inside this function, the lines will be parsed from the CSV. Then the data will be extracted into a dictionary called tv_show. This will be then sorted in order by tv show name. Then the new CSV file will be created with the data and in alphabetical order. 
