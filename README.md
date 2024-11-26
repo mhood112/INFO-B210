@@ -31,7 +31,7 @@
 ## **ListAssignment.py** 
   #### The purpose of this program is to write of function that makes a list of TV show names that ended prior to a given date. This will import the new data into a CSV file. 
   ##### * Use the Tv_Show.csv as the CSV file
-  ##### * 
+  ##### * This will be one big user define. Within this one there are a couple of nested user defined functions. At the start, the date that given will be converted in to an integer, this will allow it to be compared to the other dates, as you cannot compare strings. Then there is a function that takes the dates from the dataset and converts them into a integer. Then it will compare the given date to the dataset dates.Then it will take the dates that ended prior to the given date into a new CSV file. 
 
 ## **TupleNSets.py**
   #### The purpose of this program is to write a function that orders TV show names based on their run time (based on length of time between Premiere Date and End Date) and as a set to a new CSV file.
